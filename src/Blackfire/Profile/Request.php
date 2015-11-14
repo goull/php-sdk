@@ -23,13 +23,18 @@ class Request
             $data['options']['profile_title'] = $configuration->getTitle();
         }
         $data['user_metadata'] = $configuration->getAllMetadata();
-
-        $this->probe = new \BlackfireProbe($data['query_string'].'&'.http_build_query($data['options']));
         $this->data = $data;
+
+        $this->probe = new \BlackfireProbe($this->getHeaderSignature());
 
         if ($yaml = $configuration->toYaml()) {
             $this->probe->setConfiguration($yaml);
         }
+    }
+
+    public function getHeaderSignature()
+    {
+        return $this->data['query_string'].'&'.http_build_query($this->data['options']);
     }
 
     public function discard()

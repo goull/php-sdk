@@ -95,6 +95,26 @@ class Client
         return $profile;
     }
 
+    /**
+     * @param Profile\Configuration|string $config The profile title or a Configuration instance
+     */
+    public function generateHeaderSignature($config = null)
+    {
+        if (is_string($config)) {
+            $cfg = new Profile\Configuration();
+            $cfg->setTitle($config);
+            $config = $cfg;
+        } elseif (null === $config) {
+            $config = new Profile\Configuration();
+        } elseif (!$config instanceof Profile\Configuration) {
+            throw new \InvalidArgumentException('generateHeaderSignature() takes a string or a Profile\Configuration instance.');
+        }
+
+        $request = $this->createRequest($config);
+
+        return $request->getHeaderSignature();
+    }
+
     private function createRequest(Profile\Configuration $config)
     {
         $content = json_encode($this->getRequestDetails($config));
