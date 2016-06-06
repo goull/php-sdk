@@ -426,8 +426,8 @@ class Client
 
         $caPath = CaBundle::getSystemCaRootBundlePath();
         $sslOpts = array(
-            'verify_peer' => 1,
-            'verify_host' => 2,
+            'verify_peer' => false,
+            'verify_host' => false,
         );
 
         if (is_dir($caPath)) {
